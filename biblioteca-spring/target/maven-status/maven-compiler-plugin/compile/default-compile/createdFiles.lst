@@ -1,0 +1,4 @@
+com/example/biblioteca/model/Libro.class
+com/example/biblioteca/repository/LibroRepository.class
+com/example/biblioteca/controller/LibroController.class
+com/example/biblioteca/BibliotecaApplication.class

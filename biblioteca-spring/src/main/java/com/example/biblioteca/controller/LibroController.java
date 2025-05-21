@@ -56,4 +56,16 @@ public class LibroController {
         repo.deleteById(id);
         return "redirect:/";
     }
+
+    @GetMapping("/listar")
+    public String listarLibrosDesdeListar(Model model) {
+        model.addAttribute("libros", repo.findAll());
+        return "listar";
+    }
+
+    
+
 }
+
+
+

@@ -1,0 +1,4 @@
+/workspaces/WEB-JAVA-SPRINGBOOT/biblioteca-spring/src/main/java/com/example/biblioteca/BibliotecaApplication.java
+/workspaces/WEB-JAVA-SPRINGBOOT/biblioteca-spring/src/main/java/com/example/biblioteca/model/Libro.java
+/workspaces/WEB-JAVA-SPRINGBOOT/biblioteca-spring/src/main/java/com/example/biblioteca/repository/LibroRepository.java
+/workspaces/WEB-JAVA-SPRINGBOOT/biblioteca-spring/src/main/java/com/example/biblioteca/controller/LibroController.java
