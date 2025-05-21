@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Formulario Libro</title></head>
+<body>
+    <h1 th:text="${#strings.isEmpty(libro.id) ? 'Agregar Libro' : 'Editar Libro'}"></h1>
+    <form th:action="@{${#strings.isEmpty(libro.id) ? '/guardar' : '/actualizar'}}" method="post" th:object="${libro}">
+        <input type="hidden" th:field="*{id}" />
+        Título: <input type="text" th:field="*{titulo}" /><br/>
+        Autor: <input type="text" th:field="*{autor}" /><br/>
+        Año de Publicación: <input type="number" th:field="*{anioPublicacion}" /><br/>
+        <input type="submit" value="Guardar" />
+    </form>
+    <a href="/">Volver</a>
+</body>
+</html>
