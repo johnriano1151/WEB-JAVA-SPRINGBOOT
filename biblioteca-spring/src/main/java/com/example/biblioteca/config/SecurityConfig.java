@@ -17,9 +17,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // Asegúrate de que la configuración permita acceso adecuado
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**", "/h2-console/**").permitAll()
+                .requestMatchers("/login", "/error").permitAll() // Permitir acceso a login y página de error
                 .anyRequest().authenticated()
             )
             .formLogin(login -> login
@@ -33,8 +35,10 @@ public class SecurityConfig {
                 .permitAll()
             );
             
-        // Para permitir que la consola H2 funcione
-        http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
+        // Asegúrate de que esto está desactivado solo para desarrollo
+        http.csrf(csrf -> csrf
+            .ignoringRequestMatchers("/h2-console/**")
+        );
         http.headers(headers -> headers.frameOptions().disable());
             
         return http.build();
