@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Biblioteca</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.2/css/all.css}" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Roboto', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .login-container {
+            max-width: 400px;
+            width: 100%;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .card-header {
+            background-color: #3949ab;
+            color: white;
+            text-align: center;
+            border-radius: 10px 10px 0 0 !important;
+            padding: 1.5rem;
+        }
+        .logo {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .btn-primary {
+            background-color: #3949ab;
+            border-color: #3949ab;
+            padding: 10px;
+            font-weight: bold;
+        }
+        .btn-primary:hover {
+            background-color: #283593;
+            border-color: #283593;
+        }
+        .form-control {
+            border-radius: 5px;
+            padding: 12px;
+        }
+        .form-floating>label {
+            padding-left: 15px;
+        }
+        .alert {
+            border-radius: 5px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container login-container">
+        <div class="card">
+            <div class="card-header">
+                <div class="logo">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3>Biblioteca Digital</h3>
+                <p>Inicia sesión para administrar tus libros</p>
+            </div>
+            <div class="card-body p-4">
+                <div th:if="${error}" class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <span th:text="${error}">Error</span>
+                </div>
+                <div th:if="${message}" class="alert alert-success" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span th:text="${message}">Message</span>
+                </div>
+                <form th:action="@{/login}" method="post">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Usuario" required>
+                        <label for="username"><i class="fas fa-user me-2"></i>Usuario</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
+                        <label for="password"><i class="fas fa-lock me-2"></i>Contraseña</label>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
