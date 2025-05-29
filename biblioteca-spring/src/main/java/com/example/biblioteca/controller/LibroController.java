@@ -2,93 +2,90 @@ package com.example.biblioteca.controller;
 
 import com.example.biblioteca.model.Libro;
 import com.example.biblioteca.repository.LibroRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class LibroController {
 
-    private final LibroRepository repo;
+    private static final Logger logger = LoggerFactory.getLogger(LibroController.class);
 
-    public LibroController(LibroRepository repo) {
-        this.repo = repo;
-    }
+    @Autowired
+    private LibroRepository libroRepository;
 
-    // Mostrar lista
     @GetMapping("/")
-    public String listarLibros(Model model) {
-        model.addAttribute("libros", repo.findAll());
+    public String listar(Model model) {
+        List<Libro> libros = libroRepository.findAll();
+        model.addAttribute("libros", libros);
         return "listar";
     }
 
-    // Formulario para nuevo libro
+    @GetMapping("/listar")
+    public String listarRedirect() {
+        return "redirect:/";
+    }
+
     @GetMapping("/agregar")
-    public String mostrarFormulario(Model model) {
+    public String agregar(Model model) {
         model.addAttribute("libro", new Libro());
         return "agregar";
     }
 
-    // Guardar nuevo libro
     @PostMapping("/guardar")
-    public String guardarLibro(@ModelAttribute Libro libro) {
-        repo.save(libro);
-        return "redirect:/";
+    public String guardar(@ModelAttribute Libro libro, RedirectAttributes redirectAttributes) {
+        try {
+            logger.info("Guardando libro: {}", libro);
+            libroRepository.save(libro);
+            redirectAttributes.addFlashAttribute("mensaje", "Libro guardado correctamente");
+            return "redirect:/";
+        } catch (Exception e) {
+            logger.error("Error al guardar el libro", e);
+            redirectAttributes.addFlashAttribute("error", "Error al guardar el libro: " + e.getMessage());
+            return "redirect:/agregar";
+        }
     }
 
-    // Formulario para editar
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable Long id, Model model) {
-        model.addAttribute("libro", repo.findById(id).orElse(null));
-        return "editar";
+        Optional<Libro> libro = libroRepository.findById(id);
+        if (libro.isPresent()) {
+            model.addAttribute("libro", libro.get());
+            return "editar";
+        } else {
+            return "redirect:/";
+        }
     }
 
-    // Guardar edición
     @PostMapping("/actualizar")
-    public String actualizar(@ModelAttribute Libro libro) {
-        repo.save(libro);
-        return "redirect:/";
+    public String actualizar(@ModelAttribute Libro libro, RedirectAttributes redirectAttributes) {
+        try {
+            libroRepository.save(libro);
+            redirectAttributes.addFlashAttribute("mensaje", "Libro actualizado correctamente");
+            return "redirect:/";
+        } catch (Exception e) {
+            logger.error("Error al actualizar el libro", e);
+            redirectAttributes.addFlashAttribute("error", "Error al actualizar el libro: " + e.getMessage());
+            return "redirect:/editar/" + libro.getId();
+        }
     }
 
-    // Eliminar
     @GetMapping("/eliminar/{id}")
-    public String eliminar(@PathVariable Long id) {
-        repo.deleteById(id);
+    public String eliminar(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            libroRepository.deleteById(id);
+            redirectAttributes.addFlashAttribute("mensaje", "Libro eliminado correctamente");
+        } catch (Exception e) {
+            logger.error("Error al eliminar el libro", e);
+            redirectAttributes.addFlashAttribute("error", "Error al eliminar el libro");
+        }
         return "redirect:/";
     }
-
-    @GetMapping("/listar")
-    public String listarLibrosDesdeListar(Model model) {
-        model.addAttribute("libros", repo.findAll());
-        return "listar";
-    }
-
-    @GetMapping("/login")
-    public ModelAndView login(@RequestParam(value = "error", required = false) String error,
-                        @RequestParam(value = "logout", required = false) String logout) {
-        
-        ModelAndView model = new ModelAndView("login");
-        
-        if (error != null) {
-            model.addObject("error", "Credenciales incorrectas.");
-        }
-        
-        if (logout != null) {
-            model.addObject("message", "Sesión cerrada correctamente.");
-        }
-        
-        return model;
-    }
-
-    
-
 }
-
-
-
