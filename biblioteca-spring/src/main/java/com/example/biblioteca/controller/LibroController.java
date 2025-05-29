@@ -5,6 +5,12 @@ import com.example.biblioteca.repository.LibroRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
 
 @Controller
 public class LibroController {
@@ -61,6 +67,23 @@ public class LibroController {
     public String listarLibrosDesdeListar(Model model) {
         model.addAttribute("libros", repo.findAll());
         return "listar";
+    }
+
+    @GetMapping("/login")
+    public ModelAndView login(@RequestParam(value = "error", required = false) String error,
+                        @RequestParam(value = "logout", required = false) String logout) {
+        
+        ModelAndView model = new ModelAndView("login");
+        
+        if (error != null) {
+            model.addObject("error", "Credenciales incorrectas.");
+        }
+        
+        if (logout != null) {
+            model.addObject("message", "Sesión cerrada correctamente.");
+        }
+        
+        return model;
     }
 
     
